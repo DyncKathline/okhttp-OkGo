@@ -34,7 +34,7 @@ import com.lzy.demo.model.ItemModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -48,8 +48,8 @@ import butterknife.ButterKnife;
  */
 public abstract class MainFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
 
-    @Bind(R.id.refreshLayout) SwipeRefreshLayout refreshLayout;
-    @Bind(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.refreshLayout) SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.recyclerView) RecyclerView recyclerView;
 
     protected Context context;
     private MainAdapter adapter;

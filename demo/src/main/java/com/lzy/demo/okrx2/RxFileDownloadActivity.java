@@ -40,7 +40,7 @@ import com.lzy.okrx2.adapter.ObservableResponse;
 import java.io.File;
 import java.text.NumberFormat;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
@@ -66,13 +66,13 @@ public class RxFileDownloadActivity extends BaseRxDetailActivity {
 
     private static final int REQUEST_PERMISSION_STORAGE = 0x01;
 
-    @Bind(R.id.et_url) EditText etUrl;
-    @Bind(R.id.fileDownload1) Button btnFileDownload1;
-    @Bind(R.id.fileDownload2) Button btnFileDownload2;
-    @Bind(R.id.downloadSize) TextView tvDownloadSize;
-    @Bind(R.id.tvProgress) TextView tvProgress;
-    @Bind(R.id.netSpeed) TextView tvNetSpeed;
-    @Bind(R.id.pbProgress) NumberProgressBar pbProgress;
+    @BindView(R.id.et_url) EditText etUrl;
+    @BindView(R.id.fileDownload1) Button btnFileDownload1;
+    @BindView(R.id.fileDownload2) Button btnFileDownload2;
+    @BindView(R.id.downloadSize) TextView tvDownloadSize;
+    @BindView(R.id.tvProgress) TextView tvProgress;
+    @BindView(R.id.netSpeed) TextView tvNetSpeed;
+    @BindView(R.id.pbProgress) NumberProgressBar pbProgress;
     private NumberFormat numberFormat;
 
     @Override

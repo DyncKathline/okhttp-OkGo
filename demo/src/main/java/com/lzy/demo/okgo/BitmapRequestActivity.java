@@ -27,7 +27,7 @@ import com.lzy.demo.utils.Urls;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.model.Response;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -42,7 +42,7 @@ import butterknife.OnClick;
  */
 public class BitmapRequestActivity extends BaseDetailActivity {
 
-    @Bind(R.id.imageView) ImageView imageView;
+    @BindView(R.id.imageView) ImageView imageView;
 
     @Override
     protected void onActivityCreate(Bundle savedInstanceState) {

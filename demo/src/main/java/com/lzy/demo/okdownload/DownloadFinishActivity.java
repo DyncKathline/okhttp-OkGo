@@ -27,7 +27,7 @@ import com.lzy.demo.base.BaseActivity;
 import com.lzy.okserver.OkDownload;
 import com.lzy.okserver.task.XExecutor;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
@@ -44,10 +44,10 @@ public class DownloadFinishActivity extends BaseActivity implements XExecutor.On
     private DownloadAdapter adapter;
     private OkDownload okDownload;
 
-    @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(R.id.recyclerView) RecyclerView recyclerView;
-    @Bind(R.id.pauseAll) Button pauseAll;
-    @Bind(R.id.startAll) Button startAll;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.pauseAll) Button pauseAll;
+    @BindView(R.id.startAll) Button startAll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

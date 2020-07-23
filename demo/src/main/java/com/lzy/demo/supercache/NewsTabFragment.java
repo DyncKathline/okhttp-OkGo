@@ -39,7 +39,7 @@ import com.lzy.okgo.model.Response;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -55,8 +55,8 @@ public class NewsTabFragment extends BaseFragment implements SwipeRefreshLayout.
 
     private static final int PAGE_SIZE = 20;
 
-    @Bind(R.id.recyclerView) RecyclerView recyclerView;
-    @Bind(R.id.refreshLayout) SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.refreshLayout) SwipeRefreshLayout refreshLayout;
 
     private Context context;
     private int currentPage = 2;

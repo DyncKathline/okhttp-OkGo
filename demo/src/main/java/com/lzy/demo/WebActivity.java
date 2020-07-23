@@ -27,7 +27,7 @@ import android.widget.ProgressBar;
 
 import com.lzy.demo.base.BaseActivity;
 
-import butterknife.Bind;
+import butterknife.BindView;
 
 /**
  * ================================================
@@ -43,9 +43,9 @@ public class WebActivity extends BaseActivity {
     public final static String URL = "url";
     public final static String TITLE = "title";
 
-    @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(R.id.pb) ProgressBar pb;
-    @Bind(R.id.webView) WebView webView;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.pb) ProgressBar pb;
+    @BindView(R.id.webView) WebView webView;
 
     public static void runActivity(Context context, String title, String url) {
         Intent intent = new Intent(context, WebActivity.class);

@@ -43,7 +43,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
@@ -66,13 +66,13 @@ import io.reactivex.functions.Consumer;
  */
 public class RxFormUploadActivity extends BaseRxDetailActivity {
 
-    @Bind(R.id.formUpload1) Button btnFormUpload1;
-    @Bind(R.id.formUpload2) Button btnFormUpload2;
-    @Bind(R.id.downloadSize) TextView tvDownloadSize;
-    @Bind(R.id.tvProgress) TextView tvProgress;
-    @Bind(R.id.netSpeed) TextView tvNetSpeed;
-    @Bind(R.id.pbProgress) NumberProgressBar pbProgress;
-    @Bind(R.id.images) TextView tvImages;
+    @BindView(R.id.formUpload1) Button btnFormUpload1;
+    @BindView(R.id.formUpload2) Button btnFormUpload2;
+    @BindView(R.id.downloadSize) TextView tvDownloadSize;
+    @BindView(R.id.tvProgress) TextView tvProgress;
+    @BindView(R.id.netSpeed) TextView tvNetSpeed;
+    @BindView(R.id.pbProgress) NumberProgressBar pbProgress;
+    @BindView(R.id.images) TextView tvImages;
 
     private List<ImageItem> imageItems;
     private NumberFormat numberFormat;

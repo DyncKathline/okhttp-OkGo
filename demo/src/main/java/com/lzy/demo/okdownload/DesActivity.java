@@ -37,7 +37,7 @@ import com.lzy.okserver.download.DownloadTask;
 import java.io.File;
 import java.text.NumberFormat;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
@@ -51,16 +51,16 @@ import butterknife.OnClick;
  */
 public class DesActivity extends BaseActivity {
 
-    @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(R.id.icon) ImageView icon;
-    @Bind(R.id.name) TextView name;
-    @Bind(R.id.downloadSize) TextView downloadSize;
-    @Bind(R.id.tvProgress) TextView tvProgress;
-    @Bind(R.id.netSpeed) TextView netSpeed;
-    @Bind(R.id.pbProgress) ProgressBar pbProgress;
-    @Bind(R.id.start) Button download;
-    @Bind(R.id.remove) Button remove;
-    @Bind(R.id.restart) Button restart;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.icon) ImageView icon;
+    @BindView(R.id.name) TextView name;
+    @BindView(R.id.downloadSize) TextView downloadSize;
+    @BindView(R.id.tvProgress) TextView tvProgress;
+    @BindView(R.id.netSpeed) TextView netSpeed;
+    @BindView(R.id.pbProgress) ProgressBar pbProgress;
+    @BindView(R.id.start) Button download;
+    @BindView(R.id.remove) Button remove;
+    @BindView(R.id.restart) Button restart;
 
     private NumberFormat numberFormat;
     private DownloadTask task;

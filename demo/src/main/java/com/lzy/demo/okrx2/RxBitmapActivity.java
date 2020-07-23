@@ -24,7 +24,7 @@ import com.lzy.demo.R;
 import com.lzy.demo.base.BaseRxDetailActivity;
 import com.lzy.okgo.model.Response;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observer;
@@ -45,7 +45,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class RxBitmapActivity extends BaseRxDetailActivity {
 
-    @Bind(R.id.imageView) ImageView imageView;
+    @BindView(R.id.imageView) ImageView imageView;
 
     @Override
     protected void onActivityCreate(Bundle savedInstanceState) {

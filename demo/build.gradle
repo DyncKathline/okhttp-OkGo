@@ -34,6 +34,7 @@ android {
             signingConfig signingConfigs.appkey
         }
     }
+    flavorDimensions "default"
     productFlavors {
         miui {
             proguardFile './proguard-rules.pro'
@@ -82,7 +83,8 @@ dependencies {
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v2.0.7'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.jakewharton:butterknife:7.0.1'
+    implementation 'com.jakewharton:butterknife:8.0.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.0.1'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     compile 'com.readystatesoftware.chuck:library:1.0.4'

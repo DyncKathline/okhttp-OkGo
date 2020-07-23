@@ -43,7 +43,7 @@ import java.io.File;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -58,12 +58,12 @@ import butterknife.OnClick;
  */
 public class FormUploadActivity extends BaseDetailActivity {
 
-    @Bind(R.id.formUpload) Button btnFormUpload;
-    @Bind(R.id.downloadSize) TextView tvDownloadSize;
-    @Bind(R.id.tvProgress) TextView tvProgress;
-    @Bind(R.id.netSpeed) TextView tvNetSpeed;
-    @Bind(R.id.pbProgress) NumberProgressBar pbProgress;
-    @Bind(R.id.images) TextView tvImages;
+    @BindView(R.id.formUpload) Button btnFormUpload;
+    @BindView(R.id.downloadSize) TextView tvDownloadSize;
+    @BindView(R.id.tvProgress) TextView tvProgress;
+    @BindView(R.id.netSpeed) TextView tvNetSpeed;
+    @BindView(R.id.pbProgress) NumberProgressBar pbProgress;
+    @BindView(R.id.images) TextView tvImages;
 
     private ArrayList<ImageItem> imageItems;
     private NumberFormat numberFormat;

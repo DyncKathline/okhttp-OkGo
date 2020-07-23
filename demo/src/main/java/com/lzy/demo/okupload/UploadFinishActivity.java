@@ -27,7 +27,7 @@ import com.lzy.demo.base.BaseActivity;
 import com.lzy.okserver.OkUpload;
 import com.lzy.okserver.task.XExecutor;
 
-import butterknife.Bind;
+import butterknife.BindView;
 
 /**
  * ================================================
@@ -40,10 +40,10 @@ import butterknife.Bind;
  */
 public class UploadFinishActivity extends BaseActivity implements XExecutor.OnAllTaskEndListener {
 
-    @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(R.id.recyclerView) RecyclerView recyclerView;
-    @Bind(R.id.select) Button select;
-    @Bind(R.id.upload) Button upload;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.select) Button select;
+    @BindView(R.id.upload) Button upload;
 
     private OkUpload okUpload;
     private UploadAdapter adapter;

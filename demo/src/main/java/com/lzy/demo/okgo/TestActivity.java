@@ -32,7 +32,7 @@ import com.lzy.okgo.model.Response;
 
 import org.json.JSONObject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
@@ -46,8 +46,8 @@ import butterknife.OnClick;
  */
 public class TestActivity extends BaseActivity {
 
-    @Bind(R.id.image) ImageView imageView;
-    @Bind(R.id.edit) EditText editText;
+    @BindView(R.id.image) ImageView imageView;
+    @BindView(R.id.edit) EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

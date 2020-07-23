@@ -34,7 +34,7 @@ import com.lzy.okserver.upload.UploadTask;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
@@ -48,8 +48,8 @@ import butterknife.OnClick;
  */
 public class UploadListActivity extends BaseActivity implements XExecutor.OnAllTaskEndListener {
 
-    @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.recyclerView) RecyclerView recyclerView;
 
     private UploadAdapter adapter;
     private OkUpload okUpload;

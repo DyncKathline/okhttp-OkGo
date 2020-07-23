@@ -33,7 +33,7 @@ import com.lzy.ninegrid.NineGridView;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
@@ -47,9 +47,9 @@ import butterknife.OnClick;
  */
 public class SuperCacheActivity extends BaseActivity {
 
-    @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(R.id.viewPager) ViewPager viewPager;
-    @Bind(R.id.tab) TabLayout tab;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.viewPager) ViewPager viewPager;
+    @BindView(R.id.tab) TabLayout tab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

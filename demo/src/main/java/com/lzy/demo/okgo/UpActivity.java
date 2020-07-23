@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -56,7 +56,7 @@ import butterknife.OnClick;
  */
 public class UpActivity extends BaseDetailActivity {
 
-    @Bind(R.id.images) TextView tvImages;
+    @BindView(R.id.images) TextView tvImages;
 
     private ImageItem imageItem;
 

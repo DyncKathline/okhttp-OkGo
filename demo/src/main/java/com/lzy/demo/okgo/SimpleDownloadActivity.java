@@ -38,7 +38,7 @@ import com.lzy.okgo.request.base.Request;
 import java.io.File;
 import java.text.NumberFormat;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -55,11 +55,11 @@ public class SimpleDownloadActivity extends BaseDetailActivity {
 
     private static final int REQUEST_PERMISSION_STORAGE = 0x01;
 
-    @Bind(R.id.fileDownload) Button btnFileDownload;
-    @Bind(R.id.downloadSize) TextView tvDownloadSize;
-    @Bind(R.id.tvProgress) TextView tvProgress;
-    @Bind(R.id.netSpeed) TextView tvNetSpeed;
-    @Bind(R.id.pbProgress) NumberProgressBar pbProgress;
+    @BindView(R.id.fileDownload) Button btnFileDownload;
+    @BindView(R.id.downloadSize) TextView tvDownloadSize;
+    @BindView(R.id.tvProgress) TextView tvProgress;
+    @BindView(R.id.netSpeed) TextView tvNetSpeed;
+    @BindView(R.id.pbProgress) NumberProgressBar pbProgress;
     private NumberFormat numberFormat;
 
     @Override

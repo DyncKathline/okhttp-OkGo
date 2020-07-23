@@ -48,7 +48,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -65,9 +65,9 @@ public class DownloadListActivity extends BaseActivity {
 
     private static final int REQUEST_PERMISSION_STORAGE = 0x01;
 
-    @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(R.id.targetFolder) TextView folder;
-    @Bind(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.targetFolder) TextView folder;
+    @BindView(R.id.recyclerView) RecyclerView recyclerView;
 
     private List<ApkModel> apks;
     private DownloadListAdapter adapter;
@@ -154,18 +154,19 @@ public class DownloadListActivity extends BaseActivity {
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             ApkModel apkModel = mDatas.get(position);
-            holder.bind(apkModel);
+            holder.BindView(apkModel);
         }
+
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @Bind(R.id.name) TextView name;
-        @Bind(R.id.priority) TextView priority;
-        @Bind(R.id.icon) ImageView icon;
-        @Bind(R.id.download) Button download;
+        @BindView(R.id.name) TextView name;
+        @BindView(R.id.priority) TextView priority;
+        @BindView(R.id.icon) ImageView icon;
+        @BindView(R.id.download) Button download;
 
         private ApkModel apk;
 
@@ -174,7 +175,7 @@ public class DownloadListActivity extends BaseActivity {
             ButterKnife.bind(this, itemView);
         }
 
-        public void bind(ApkModel apk) {
+        public void BindView(ApkModel apk) {
             this.apk = apk;
             if (OkDownload.getInstance().getTask(apk.url) != null) {
                 download.setText("已在队列");

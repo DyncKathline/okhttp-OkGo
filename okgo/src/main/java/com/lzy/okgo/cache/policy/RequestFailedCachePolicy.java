@@ -17,6 +17,7 @@ package com.lzy.okgo.cache.policy;
 
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.callback.Callback;
+import com.lzy.okgo.lifecycle.AppCompatActivityLifecycle;
 import com.lzy.okgo.model.Response;
 import com.lzy.okgo.request.base.Request;
 
@@ -40,8 +41,10 @@ public class RequestFailedCachePolicy<T> extends BaseCachePolicy<T> {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mCallback.onSuccess(success);
-                mCallback.onFinish();
+                if(AppCompatActivityLifecycle.isLifecycleActive(request.getLifecycle())) {
+                    mCallback.onSuccess(success);
+                    mCallback.onFinish();
+                }
             }
         });
     }
@@ -54,16 +57,20 @@ public class RequestFailedCachePolicy<T> extends BaseCachePolicy<T> {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mCallback.onCacheSuccess(cacheSuccess);
-                    mCallback.onFinish();
+                    if(AppCompatActivityLifecycle.isLifecycleActive(request.getLifecycle())) {
+                        mCallback.onCacheSuccess(cacheSuccess);
+                        mCallback.onFinish();
+                    }
                 }
             });
         } else {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mCallback.onError(error);
-                    mCallback.onFinish();
+                    if(AppCompatActivityLifecycle.isLifecycleActive(request.getLifecycle())) {
+                        mCallback.onError(error);
+                        mCallback.onFinish();
+                    }
                 }
             });
         }
@@ -95,7 +102,9 @@ public class RequestFailedCachePolicy<T> extends BaseCachePolicy<T> {
                     prepareRawCall();
                 } catch (Throwable throwable) {
                     Response<T> error = Response.error(false, rawCall, null, throwable);
-                    mCallback.onError(error);
+                    if(AppCompatActivityLifecycle.isLifecycleActive(request.getLifecycle())) {
+                        mCallback.onError(error);
+                    }
                     return;
                 }
                 requestNetworkAsync();

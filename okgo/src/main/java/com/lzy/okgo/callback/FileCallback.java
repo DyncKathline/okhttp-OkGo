@@ -15,6 +15,8 @@
  */
 package com.lzy.okgo.callback;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import com.lzy.okgo.convert.FileConvert;
 
 import java.io.File;
@@ -48,8 +50,8 @@ public abstract class FileCallback extends AbsCallback<File> {
     }
 
     @Override
-    public File convertResponse(Response response) throws Throwable {
-        File file = convert.convertResponse(response);
+    public File convertResponse(LifecycleOwner lifecycleOwner, Response response) throws Throwable {
+        File file = convert.convertResponse(lifecycleOwner, response);
         response.close();
         return file;
     }

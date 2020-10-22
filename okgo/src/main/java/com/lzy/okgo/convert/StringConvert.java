@@ -15,6 +15,8 @@
  */
 package com.lzy.okgo.convert;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
@@ -30,7 +32,7 @@ import okhttp3.ResponseBody;
 public class StringConvert implements Converter<String> {
 
     @Override
-    public String convertResponse(Response response) throws Throwable {
+    public String convertResponse(LifecycleOwner lifecycleOwner, Response response) throws Throwable {
         ResponseBody body = response.body();
         if (body == null) return null;
         return body.string();

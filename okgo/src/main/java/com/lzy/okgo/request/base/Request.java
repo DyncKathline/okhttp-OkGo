@@ -17,6 +17,8 @@ package com.lzy.okgo.request.base;
 
 import android.text.TextUtils;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.adapter.AdapterParam;
 import com.lzy.okgo.adapter.CacheCall;
@@ -70,6 +72,8 @@ public abstract class Request<T, R extends Request> implements Serializable {
     protected transient Converter<T> converter;
     protected transient CachePolicy<T> cachePolicy;
     protected transient ProgressRequestBody.UploadInterceptor uploadInterceptor;
+    /** 请求生命周期控制 */
+    private LifecycleOwner mLifecycleOwner;
 
     public Request(String url) {
         this.url = url;
@@ -90,9 +94,16 @@ public abstract class Request<T, R extends Request> implements Serializable {
         cacheTime = go.getCacheTime();
     }
 
+    public LifecycleOwner getLifecycle() {
+        return mLifecycleOwner;
+    }
+
     @SuppressWarnings("unchecked")
     public R tag(Object tag) {
         this.tag = tag;
+        if(tag instanceof LifecycleOwner) {
+            mLifecycleOwner = (LifecycleOwner) tag;
+        }
         return (R) this;
     }
 
@@ -341,7 +352,7 @@ public abstract class Request<T, R extends Request> implements Serializable {
         //构建请求体，返回call对象
         RequestBody requestBody = generateRequestBody();
         if (requestBody != null) {
-            ProgressRequestBody<T> progressRequestBody = new ProgressRequestBody<>(requestBody, callback);
+            ProgressRequestBody<T> progressRequestBody = new ProgressRequestBody<>(requestBody, mLifecycleOwner, callback);
             progressRequestBody.setInterceptor(uploadInterceptor);
             mRequest = generateRequest(progressRequestBody);
         } else {

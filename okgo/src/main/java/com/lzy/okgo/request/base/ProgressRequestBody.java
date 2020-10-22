@@ -15,7 +15,10 @@
  */
 package com.lzy.okgo.request.base;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import com.lzy.okgo.callback.Callback;
+import com.lzy.okgo.lifecycle.AppCompatActivityLifecycle;
 import com.lzy.okgo.model.Progress;
 import com.lzy.okgo.utils.HttpUtils;
 import com.lzy.okgo.utils.OkLogger;
@@ -44,9 +47,11 @@ public class ProgressRequestBody<T> extends RequestBody {
     private RequestBody requestBody;         //实际的待包装请求体
     private Callback<T> callback;
     private UploadInterceptor interceptor;
+    private LifecycleOwner mLifecycleOwner;
 
-    ProgressRequestBody(RequestBody requestBody, Callback<T> callback) {
+    ProgressRequestBody(RequestBody requestBody, LifecycleOwner lifecycleOwner, Callback<T> callback) {
         this.requestBody = requestBody;
+        this.mLifecycleOwner = lifecycleOwner;
         this.callback = callback;
     }
 
@@ -94,7 +99,7 @@ public class ProgressRequestBody<T> extends RequestBody {
             Progress.changeProgress(progress, byteCount, new Progress.Action() {
                 @Override
                 public void call(Progress progress) {
-                    if (interceptor != null) {
+                    if (interceptor != null && AppCompatActivityLifecycle.isLifecycleActive(mLifecycleOwner)) {
                         interceptor.uploadProgress(progress);
                     } else {
                         onProgress(progress);
@@ -108,7 +113,7 @@ public class ProgressRequestBody<T> extends RequestBody {
         HttpUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (callback != null) {
+                if (callback != null && AppCompatActivityLifecycle.isLifecycleActive(mLifecycleOwner)) {
                     callback.uploadProgress(progress);
                 }
             }

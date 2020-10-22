@@ -18,6 +18,8 @@ package com.lzy.okgo.callback;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import com.lzy.okgo.convert.BitmapConvert;
 
 import okhttp3.Response;
@@ -48,8 +50,8 @@ public abstract class BitmapCallback extends AbsCallback<Bitmap> {
     }
 
     @Override
-    public Bitmap convertResponse(Response response) throws Throwable {
-        Bitmap bitmap = convert.convertResponse(response);
+    public Bitmap convertResponse(LifecycleOwner lifecycleOwner, Response response) throws Throwable {
+        Bitmap bitmap = convert.convertResponse(lifecycleOwner, response);
         response.close();
         return bitmap;
     }

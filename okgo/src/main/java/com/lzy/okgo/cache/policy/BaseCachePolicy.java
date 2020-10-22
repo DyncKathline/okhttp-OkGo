@@ -23,6 +23,7 @@ import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.callback.Callback;
 import com.lzy.okgo.db.CacheManager;
 import com.lzy.okgo.exception.HttpException;
+import com.lzy.okgo.lifecycle.AppCompatActivityLifecycle;
 import com.lzy.okgo.model.Response;
 import com.lzy.okgo.request.base.Request;
 import com.lzy.okgo.utils.HeaderParser;
@@ -107,7 +108,7 @@ public abstract class BaseCachePolicy<T> implements CachePolicy<T> {
                 return Response.error(false, rawCall, response, HttpException.NET_ERROR());
             }
 
-            T body = request.getConverter().convertResponse(response);
+            T body = request.getConverter().convertResponse(request.getLifecycle(), response);
             //save cache when request is successful
             saveCache(response.headers(), body);
             return Response.success(false, body, rawCall, response);
@@ -141,7 +142,9 @@ public abstract class BaseCachePolicy<T> implements CachePolicy<T> {
                 } else {
                     if (!call.isCanceled()) {
                         Response<T> error = Response.error(false, call, null, e);
-                        onError(error);
+                        if(AppCompatActivityLifecycle.isLifecycleActive(request.getLifecycle())) {
+                            onError(error);
+                        }
                     }
                 }
             }
@@ -153,21 +156,27 @@ public abstract class BaseCachePolicy<T> implements CachePolicy<T> {
                 //network error
                 if (responseCode == 404 || responseCode >= 500) {
                     Response<T> error = Response.error(false, call, response, HttpException.NET_ERROR());
-                    onError(error);
+                    if(AppCompatActivityLifecycle.isLifecycleActive(request.getLifecycle())) {
+                        onError(error);
+                    }
                     return;
                 }
 
                 if (onAnalysisResponse(call, response)) return;
 
                 try {
-                    T body = request.getConverter().convertResponse(response);
+                    T body = request.getConverter().convertResponse(request.getLifecycle(), response);
                     //save cache when request is successful
                     saveCache(response.headers(), body);
                     Response<T> success = Response.success(false, body, call, response);
-                    onSuccess(success);
+                    if(AppCompatActivityLifecycle.isLifecycleActive(request.getLifecycle())) {
+                        onSuccess(success);
+                    }
                 } catch (Throwable throwable) {
                     Response<T> error = Response.error(false, call, response, throwable);
-                    onError(error);
+                    if(AppCompatActivityLifecycle.isLifecycleActive(request.getLifecycle())) {
+                        onError(error);
+                    }
                 }
             }
         });

@@ -1,11 +1,13 @@
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
+//gradlew install
+//gradlew bintrayUpload
 
 version = rootProject.ext.versionName_okgo      // 数据仓库依赖第三部分
 
-def siteUrl = 'https://github.com/jeasonlzy/OkGo'
-def gitUrl = 'https://github.com/jeasonlzy/OkGo.git'
-group = "com.lzy.net"       // 数据仓库依赖第一部分
+def siteUrl = 'https://github.com/DyncKathline/OkGo'
+def gitUrl = 'https://github.com/DyncKathline/OkGo.git'
+group = "com.kathline.net"       // 数据仓库依赖第一部分
 
 install {
     repositories.mavenInstaller {
@@ -22,9 +24,9 @@ install {
                 }
                 developers {
                     developer {
-                        id 'jeasonlzy'                // 开发者信息
-                        name 'LiaoZiYao'              // 开发者信息
-                        email 'liaojeason@126.com'    // 开发者信息
+                        id 'kathline'                // 开发者信息
+                        name 'kathline'              // 开发者信息
+                        email 'xiongxuesong@dync.com'    // 开发者信息
                     }
                 }
                 scm {
@@ -83,7 +85,7 @@ bintray {
     key = properties.getProperty("bintray.apikey")
     configurations = ['archives']
     pkg {
-        repo = "maven"
+        repo = "DyncKathline"
         name = "okgo"             // 数据仓库依赖第二部分
         websiteUrl = siteUrl
         vcsUrl = gitUrl

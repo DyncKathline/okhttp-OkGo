@@ -18,7 +18,10 @@ package com.lzy.okgo.convert;
 import android.os.Environment;
 import android.text.TextUtils;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import com.lzy.okgo.callback.Callback;
+import com.lzy.okgo.lifecycle.AppCompatActivityLifecycle;
 import com.lzy.okgo.model.Progress;
 import com.lzy.okgo.utils.HttpUtils;
 import com.lzy.okgo.utils.IOUtils;
@@ -65,7 +68,7 @@ public class FileConvert implements Converter<File> {
     }
 
     @Override
-    public File convertResponse(Response response) throws Throwable {
+    public File convertResponse(final LifecycleOwner lifecycleOwner, Response response) throws Throwable {
         String url = response.request().url().toString();
         if (TextUtils.isEmpty(folder)) folder = Environment.getExternalStorageDirectory() + DM_TARGET_FOLDER;
         if (TextUtils.isEmpty(fileName)) fileName = HttpUtils.getNetFileName(response, url);
@@ -100,7 +103,9 @@ public class FileConvert implements Converter<File> {
                 Progress.changeProgress(progress, len, new Progress.Action() {
                     @Override
                     public void call(Progress progress) {
-                        onProgress(progress);
+                        if(AppCompatActivityLifecycle.isLifecycleActive(lifecycleOwner)) {
+                            onProgress(progress);
+                        }
                     }
                 });
             }

@@ -13,8 +13,9 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    api 'com.squareup.okhttp3:okhttp:4.9.0'
+    api 'androidx.lifecycle:lifecycle-runtime:2.2.0'
 }
 
-//apply from: 'bintray.gradle'
+apply from: 'bintray.gradle'

@@ -15,6 +15,8 @@
  */
 package com.lzy.okgo.callback;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import com.lzy.okgo.convert.StringConvert;
 
 import okhttp3.Response;
@@ -37,8 +39,8 @@ public abstract class StringCallback extends AbsCallback<String> {
     }
 
     @Override
-    public String convertResponse(Response response) throws Throwable {
-        String s = convert.convertResponse(response);
+    public String convertResponse(LifecycleOwner lifecycleOwner, Response response) throws Throwable {
+        String s = convert.convertResponse(lifecycleOwner, response);
         response.close();
         return s;
     }

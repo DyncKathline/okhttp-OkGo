@@ -19,6 +19,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
@@ -54,7 +56,7 @@ public class BitmapConvert implements Converter<Bitmap> {
     }
 
     @Override
-    public Bitmap convertResponse(Response response) throws Throwable {
+    public Bitmap convertResponse(LifecycleOwner lifecycleOwner, Response response) throws Throwable {
         ResponseBody body = response.body();
         if (body == null) return null;
         return parse(body.bytes());

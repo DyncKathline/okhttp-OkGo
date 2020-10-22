@@ -16,8 +16,7 @@
 package com.lzy.demo.okupload;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import android.os.Parcelable;
 import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,11 +26,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
+import com.luck.picture.lib.entity.LocalMedia;
 import com.lzy.demo.R;
 import com.lzy.demo.ui.NumberProgressBar;
 import com.lzy.demo.utils.Urls;
-import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.convert.StringConvert;
 import com.lzy.okgo.db.UploadManager;
@@ -69,7 +71,7 @@ public class UploadAdapter extends RecyclerView.Adapter<UploadAdapter.ViewHolder
     public static final int TYPE_ING = 2;
 
     private List<UploadTask<?>> values;
-    private List<ImageItem> images;
+    private List<LocalMedia> images;
     private NumberFormat numberFormat;
     private LayoutInflater inflater;
     private Context context;
@@ -100,24 +102,24 @@ public class UploadAdapter extends RecyclerView.Adapter<UploadAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
-    public List<UploadTask<?>> updateData(List<ImageItem> images) {
+    public List<UploadTask<?>> updateData(List<LocalMedia> images) {
         this.type = -1;
         this.images = images;
         values = new ArrayList<>();
         if (images != null) {
             Random random = new Random();
             for (int i = 0; i < images.size(); i++) {
-                ImageItem imageItem = images.get(i);
+                LocalMedia imageItem = images.get(i);
                 //这里是演示可以传递任何数据
                 PostRequest<String> postRequest = OkGo.<String>post(Urls.URL_FORM_UPLOAD)//
                         .headers("aaa", "111")//
                         .params("bbb", "222")//
-                        .params("fileKey" + i, new File(imageItem.path))//
+                        .params("fileKey" + i, new File(imageItem.getPath()))//
                         .converter(new StringConvert());
 
-                UploadTask<String> task = OkUpload.request(imageItem.path, postRequest)//
+                UploadTask<String> task = OkUpload.request(imageItem.getPath(), postRequest)//
                         .priority(random.nextInt(100))//
-                        .extra1(imageItem)//
+                        .extra2(imageItem)//
                         .save();
                 values.add(task);
             }
@@ -185,9 +187,9 @@ public class UploadAdapter extends RecyclerView.Adapter<UploadAdapter.ViewHolder
 
         public void BindView() {
             Progress progress = task.progress;
-            ImageItem item = (ImageItem) progress.extra1;
-            Glide.with(context).load(item.path).error(R.mipmap.ic_launcher).into(icon);
-            name.setText(item.name);
+            LocalMedia item = (LocalMedia) progress.extra1;
+            Glide.with(context).load(item.getPath()).error(R.mipmap.ic_launcher).into(icon);
+            name.setText(item.getFileName());
             priority.setText(String.format("优先级：%s", progress.priority));
         }
 
@@ -252,7 +254,7 @@ public class UploadAdapter extends RecyclerView.Adapter<UploadAdapter.ViewHolder
             if (type == -1) {
                 int removeIndex = -1;
                 for (int i = 0; i < images.size(); i++) {
-                    if (images.get(i).path.equals(task.progress.tag)) {
+                    if (images.get(i).getPath().equals(task.progress.tag)) {
                         removeIndex = i;
                         break;
                     }

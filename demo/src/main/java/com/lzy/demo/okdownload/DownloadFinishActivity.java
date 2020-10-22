@@ -16,11 +16,12 @@
 package com.lzy.demo.okdownload;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lzy.demo.R;
 import com.lzy.demo.base.BaseActivity;
@@ -44,8 +45,10 @@ public class DownloadFinishActivity extends BaseActivity implements XExecutor.On
     private DownloadAdapter adapter;
     private OkDownload okDownload;
 
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
     @BindView(R.id.pauseAll) Button pauseAll;
     @BindView(R.id.startAll) Button startAll;
 

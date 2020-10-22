@@ -20,7 +20,6 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
 
     <application
         android:name=".GApp"
@@ -86,13 +85,6 @@
         <activity
             android:name=".okupload.UploadingActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <!-- Rx相关 -->
-        <activity android:name=".okrx2.RxCommonActivity"/>
-        <activity android:name=".okrx2.RxCacheActivity"/>
-        <activity android:name=".okrx2.RxRetrofitActivity"/>
-        <activity android:name=".okrx2.RxBitmapActivity"/>
-        <activity android:name=".okrx2.RxFileDownloadActivity"/>
-        <activity android:name=".okrx2.RxFormUploadActivity"/>
     </application>
 
 </manifest>

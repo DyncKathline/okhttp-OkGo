@@ -17,12 +17,13 @@ package com.lzy.demo.base;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBar;
 
 import com.lzy.demo.R;
 import com.lzy.demo.utils.Convert;

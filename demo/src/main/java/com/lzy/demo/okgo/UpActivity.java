@@ -17,20 +17,22 @@ package com.lzy.demo.okgo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.listener.OnResultCallbackListener;
 import com.lzy.demo.R;
 import com.lzy.demo.base.BaseDetailActivity;
 import com.lzy.demo.callback.DialogCallback;
 import com.lzy.demo.model.LzyResponse;
 import com.lzy.demo.model.ServerModel;
-import com.lzy.demo.utils.GlideImageLoader;
+import com.lzy.demo.utils.GlideEngine;
 import com.lzy.demo.utils.Urls;
-import com.lzy.imagepicker.ImagePicker;
-import com.lzy.imagepicker.bean.ImageItem;
-import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.model.Response;
 
@@ -58,7 +60,7 @@ public class UpActivity extends BaseDetailActivity {
 
     @BindView(R.id.images) TextView tvImages;
 
-    private ImageItem imageItem;
+    private LocalMedia imageItem;
 
     @Override
     protected void onActivityCreate(Bundle savedInstanceState) {
@@ -76,34 +78,26 @@ public class UpActivity extends BaseDetailActivity {
 
     @OnClick(R.id.selectImage)
     public void selectImage(View view) {
-        ImagePicker imagePicker = ImagePicker.getInstance();
-        imagePicker.setImageLoader(new GlideImageLoader());
-        imagePicker.setMultiMode(false);   //单选
-        imagePicker.setShowCamera(true);  //显示拍照按钮
-        imagePicker.setSelectLimit(9);    //最多选择9张
-        imagePicker.setCrop(false);       //不进行裁剪
-        Intent intent = new Intent(this, ImageGridActivity.class);
-        startActivityForResult(intent, 100);
-    }
+        PictureSelector.create(this)
+                .openGallery(PictureMimeType.ofAll())
+                .loadImageEngine(GlideEngine.createGlideEngine())
+                .forResult(new OnResultCallbackListener<LocalMedia>() {
+                    @Override
+                    public void onResult(List<LocalMedia> result) {
+                        // 结果回调
+                        if (result.size() > 0) {
+                            imageItem = result.get(0);
+                            tvImages.setText(imageItem.getPath());
+                        } else {
+                            tvImages.setText("--");
+                        }
+                    }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
-            if (data != null && requestCode == 100) {
-                //noinspection unchecked
-                List<ImageItem> imageItems = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
-                if (imageItems != null && imageItems.size() > 0) {
-                    imageItem = imageItems.get(0);
-                    tvImages.setText(imageItem.path);
-                } else {
-                    tvImages.setText("--");
-                }
-            } else {
-                Toast.makeText(this, "没有选择图片", Toast.LENGTH_SHORT).show();
-                tvImages.setText("--");
-            }
-        }
+                    @Override
+                    public void onCancel() {
+                        // 取消
+                    }
+                });
     }
 
     @OnClick(R.id.upJson)
@@ -185,7 +179,7 @@ public class UpActivity extends BaseDetailActivity {
                 .tag(this)//
                 .headers("header1", "headerValue1")//
 //                .params("param1", "paramValue1")// 这里不要使用params，upBytes 与 params 是互斥的，只有 upBytes 的数据会被上传
-                .upFile(new File(imageItem.path))//
+                .upFile(new File(imageItem.getPath()))//
                 .execute(new DialogCallback<LzyResponse<ServerModel>>(this) {
                     @Override
                     public void onSuccess(Response<LzyResponse<ServerModel>> response) {

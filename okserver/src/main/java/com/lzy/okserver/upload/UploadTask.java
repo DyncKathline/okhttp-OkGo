@@ -16,6 +16,7 @@
 package com.lzy.okserver.upload;
 
 import android.content.ContentValues;
+import android.os.Parcelable;
 
 import com.lzy.okgo.db.UploadManager;
 import com.lzy.okgo.model.Progress;
@@ -80,7 +81,7 @@ public class UploadTask<T> implements Runnable {
         return this;
     }
 
-    public UploadTask<T> extra2(Serializable extra2) {
+    public UploadTask<T> extra2(Parcelable extra2) {
         progress.extra2 = extra2;
         return this;
     }

@@ -15,13 +15,23 @@
  */
 package com.lzy.okgo.utils;
 
+import android.content.Context;
+import android.net.Uri;
+import android.os.Build;
+import android.os.ParcelFileDescriptor;
+import android.os.SystemClock;
 import android.text.TextUtils;
 
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.model.HttpHeaders;
 import com.lzy.okgo.model.HttpParams;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.FileNameMap;
 import java.net.URLConnection;
@@ -37,6 +47,11 @@ import okhttp3.MultipartBody;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.internal.Util;
+import okio.Buffer;
+import okio.BufferedSink;
+import okio.Okio;
+import okio.Source;
 
 /**
  * ================================================
@@ -116,12 +131,90 @@ public class HttpUtils {
             for (Map.Entry<String, List<HttpParams.FileWrapper>> entry : params.fileParamsMap.entrySet()) {
                 List<HttpParams.FileWrapper> fileValues = entry.getValue();
                 for (HttpParams.FileWrapper fileWrapper : fileValues) {
-                    RequestBody fileBody = RequestBody.create(fileWrapper.contentType, fileWrapper.file);
+                    RequestBody fileBody;
+                    if (fileWrapper.file != null) {
+//					fileBody = RequestBody.create(fileWrapper.contentType, fileWrapper.file)
+                        fileBody = createRequestBody(HttpParams.MEDIA_TYPE_STREAM, fileWrapper.file);
+                    } else if (fileWrapper.fileInputStream != null) {
+                        fileBody = createRequestBody(HttpParams.MEDIA_TYPE_STREAM, fileWrapper.fileInputStream);
+                    } else {
+                        fileBody = RequestBody.create(HttpUtils.guessMimeType(fileWrapper.fileName), fileWrapper.fileContent);
+                    }
                     multipartBodybuilder.addFormDataPart(entry.getKey(), fileWrapper.fileName, fileBody);
                 }
             }
             return multipartBodybuilder.build();
         }
+    }
+
+    /**
+     * Returns a new request body that transmits the content of {@code file}.
+     */
+    public static RequestBody createRequestBody(final MediaType contentType, final File file) {
+        if (file == null)
+            throw new NullPointerException("file == null");
+
+        return new RequestBody() {
+            @Override
+            public MediaType contentType() {
+                return contentType;
+            }
+
+            @Override
+            public long contentLength() {
+                return file.length();
+            }
+
+            @Override
+            public void writeTo(BufferedSink sink) throws IOException {
+                Source source = null;
+                try {
+                    source = Okio.source(file);
+                    sink.writeAll(source);
+                } finally {
+                    if (source != null) {
+                        Util.closeQuietly(source);
+                    }
+                }
+            }
+        };
+    }
+
+    /**
+     * Returns a new request body that transmits the content of {@code file}.
+     */
+    public static RequestBody createRequestBody(final MediaType contentType, final InputStream is) {
+        if (is == null)
+            throw new NullPointerException("is == null");
+
+        return new RequestBody() {
+            @Override
+            public MediaType contentType() {
+                return contentType;
+            }
+
+            @Override
+            public long contentLength() {
+                try {
+                    return is.available();
+                } catch (IOException e) {
+                    return 0;
+                }
+            }
+
+            @Override
+            public void writeTo(BufferedSink sink) throws IOException {
+                Source source = null;
+                try {
+                    source = Okio.source(is);
+                    sink.writeAll(source);
+                } finally {
+                    if (source != null) {
+                        Util.closeQuietly(source);
+                    }
+                }
+            }
+        };
     }
 
     /** 根据响应头或者url获取文件名 */
@@ -201,6 +294,82 @@ public class HttpUtils {
         return false;
     }
 
+    /**
+     * AndroidQ之前使用
+     * @param fileName
+     * @return
+     */
+    public static InputStream readFileInputStream(String fileName) {
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(fileName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return inputStream;
+    }
+
+    /**
+     * AndroidQ使用
+     * @param context
+     * @param uri
+     * @return
+     */
+    public static InputStream uriToInputStream(Context context, Uri uri) {
+        InputStream inputStream = null;
+        ParcelFileDescriptor pfd = null;
+        try {
+            pfd = context.getContentResolver().openFileDescriptor(uri, "r");
+            if (pfd != null) {
+                inputStream = new FileInputStream(pfd.getFileDescriptor());
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return inputStream;
+    }
+
+    public static byte[] uriToByte(Context context, Uri uri) {
+        InputStream inputStream = null;
+        ParcelFileDescriptor pfd = null;
+        try {
+            pfd = context.getContentResolver().openFileDescriptor(uri, "r");
+            if (pfd != null) {
+                inputStream = new FileInputStream(pfd.getFileDescriptor());
+                byte[] buffer = new byte[1024];
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                // 开始读取数据
+                int len = 0;// 每次读取到的数据的长度
+                while ((len = inputStream.read(buffer)) != -1) {// len值为-1时，表示没有数据了
+                    // append方法往sb对象里面添加数据
+                    outputStream.write(buffer, 0, len);
+                }
+                // 输出字符串
+                return outputStream.toByteArray();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    //Android M 之前的版本
+    public static boolean beforeAndroidM() {
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M;
+    }
+
+    //Android N 之前的版本
+    public static boolean beforeAndroidN() {
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.N;
+    }
+
+    //Android 10 之前的版本
+    public static boolean beforeAndroidTen() {
+        return android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.Q;
+    }
+
     /** 根据文件名获取MIME类型 */
     public static MediaType guessMimeType(String fileName) {
         FileNameMap fileNameMap = URLConnection.getFileNameMap();
@@ -210,6 +379,33 @@ public class HttpUtils {
             return HttpParams.MEDIA_TYPE_STREAM;
         }
         return MediaType.parse(contentType);
+    }
+
+    /**
+     * 获取文件名及后缀
+     */
+    public static String getFileNameWithSuffix(Context context, String path) {
+        if(TextUtils.isEmpty(path)){
+            return "";
+        }
+        String toPath = path;
+        if (!beforeAndroidTen()) {
+            if(path.startsWith("content://")) {
+                toPath = UriUtils.getPathByUri(context, Uri.parse(toPath));
+            }else {
+                toPath = "file://" + path;
+                toPath = UriUtils.getPathByUri(context, Uri.parse(toPath));
+            }
+        }
+        if(TextUtils.isEmpty(toPath)) {
+            toPath = path;
+        }
+        int start = toPath.lastIndexOf("/");
+        if (start != -1) {
+            return toPath.substring(start + 1);
+        } else {
+            return "";
+        }
     }
 
     public static <T> T checkNotNull(T object, String message) {

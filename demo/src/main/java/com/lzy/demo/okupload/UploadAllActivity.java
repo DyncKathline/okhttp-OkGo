@@ -16,11 +16,12 @@
 package com.lzy.demo.okupload;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lzy.demo.R;
 import com.lzy.demo.base.BaseActivity;
@@ -41,8 +42,10 @@ import butterknife.OnClick;
  */
 public class UploadAllActivity extends BaseActivity implements XExecutor.OnAllTaskEndListener {
 
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
     @BindView(R.id.select) Button select;
     @BindView(R.id.upload) Button upload;
     @BindView(R.id.deleteAll) Button deleteAll;

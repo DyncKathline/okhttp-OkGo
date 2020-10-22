@@ -15,25 +15,31 @@
  */
 package com.lzy.demo.okgo;
 
-import android.content.Intent;
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.format.Formatter;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.listener.OnResultCallbackListener;
 import com.lzy.demo.R;
 import com.lzy.demo.base.BaseDetailActivity;
 import com.lzy.demo.callback.JsonCallback;
 import com.lzy.demo.model.LzyResponse;
 import com.lzy.demo.model.ServerModel;
 import com.lzy.demo.ui.NumberProgressBar;
-import com.lzy.demo.utils.GlideImageLoader;
+import com.lzy.demo.utils.GlideEngine;
 import com.lzy.demo.utils.Urls;
-import com.lzy.imagepicker.ImagePicker;
-import com.lzy.imagepicker.bean.ImageItem;
-import com.lzy.imagepicker.ui.ImageGridActivity;
+import com.lzy.demo.utils.permission.PermissionCompat;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.model.Progress;
 import com.lzy.okgo.model.Response;
@@ -42,6 +48,7 @@ import com.lzy.okgo.request.base.Request;
 import java.io.File;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,6 +65,8 @@ import butterknife.OnClick;
  */
 public class FormUploadActivity extends BaseDetailActivity {
 
+    public static final String TAG = FormUploadActivity.class.getSimpleName();
+
     @BindView(R.id.formUpload) Button btnFormUpload;
     @BindView(R.id.downloadSize) TextView tvDownloadSize;
     @BindView(R.id.tvProgress) TextView tvProgress;
@@ -65,7 +74,7 @@ public class FormUploadActivity extends BaseDetailActivity {
     @BindView(R.id.pbProgress) NumberProgressBar pbProgress;
     @BindView(R.id.images) TextView tvImages;
 
-    private ArrayList<ImageItem> imageItems;
+    private ArrayList<LocalMedia> imageItems;
     private NumberFormat numberFormat;
 
     @Override
@@ -76,6 +85,28 @@ public class FormUploadActivity extends BaseDetailActivity {
 
         numberFormat = NumberFormat.getPercentInstance();
         numberFormat.setMinimumFractionDigits(2);
+
+        checkSDCardPermission();
+    }
+
+    /** 检查SD卡权限 */
+    protected void checkSDCardPermission() {
+        PermissionCompat.permission(this, new PermissionCompat.PerCompatCallbackAdpt() {
+            @Override
+            public void ok(int cmds) {
+                System.out.println("==============权限通过了==============");
+            }
+            @Override
+            public void refuse(int cmds) {
+                System.out.println("==============权限被拒绝了==============");
+            }
+
+            // 还未添加功能
+            @Override
+            public void goSettings(int cmds) {
+                System.out.println("==============请去setting界面==============");
+            }
+        }, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE,Manifest.permission.CAMERA);
     }
 
     @Override
@@ -87,37 +118,45 @@ public class FormUploadActivity extends BaseDetailActivity {
 
     @OnClick(R.id.selectImage)
     public void selectImage(View view) {
-        ImagePicker imagePicker = ImagePicker.getInstance();
-        imagePicker.setImageLoader(new GlideImageLoader());
-        imagePicker.setMultiMode(true);   //多选
-        imagePicker.setShowCamera(true);  //显示拍照按钮
-        imagePicker.setSelectLimit(9);    //最多选择9张
-        imagePicker.setCrop(false);       //不进行裁剪
-        Intent intent = new Intent(this, ImageGridActivity.class);
-        startActivityForResult(intent, 100);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
-            if (data != null && requestCode == 100) {
-                imageItems = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
-                if (imageItems != null && imageItems.size() > 0) {
-                    StringBuilder sb = new StringBuilder();
-                    for (int i = 0; i < imageItems.size(); i++) {
-                        if (i == imageItems.size() - 1) sb.append("图片").append(i + 1).append(" ： ").append(imageItems.get(i).path);
-                        else sb.append("图片").append(i + 1).append(" ： ").append(imageItems.get(i).path).append("\n");
+        PictureSelector.create(this)
+                .openGallery(PictureMimeType.ofAll())
+                .loadImageEngine(GlideEngine.createGlideEngine())
+                .forResult(new OnResultCallbackListener<LocalMedia>() {
+                    @Override
+                    public void onResult(List<LocalMedia> result) {
+                        // 结果回调
+                        for (LocalMedia media : result) {
+                            Log.i(TAG, "是否压缩:" + media.isCompressed());
+                            Log.i(TAG, "压缩:" + media.getCompressPath());
+                            Log.i(TAG, "原图:" + media.getPath());
+                            Log.i(TAG, "是否裁剪:" + media.isCut());
+                            Log.i(TAG, "裁剪:" + media.getCutPath());
+                            Log.i(TAG, "是否开启原图:" + media.isOriginal());
+                            Log.i(TAG, "原图路径:" + media.getOriginalPath());
+                            Log.i(TAG, "Android Q 特有Path:" + media.getAndroidQToPath());
+                            Log.i(TAG, "宽高: " + media.getWidth() + "x" + media.getHeight());
+                            Log.i(TAG, "Size: " + media.getSize());
+                            // TODO 可以通过PictureSelectorExternalUtils.getExifInterface();方法获取一些额外的资源信息，如旋转角度、经纬度等信息
+                        }
+                        imageItems = new ArrayList<>();
+                        if (result.size() > 0) {
+                            imageItems.addAll(result);
+                            StringBuilder sb = new StringBuilder();
+                            for (int i = 0; i < result.size(); i++) {
+                                if (i == result.size() - 1) sb.append("图片").append(i + 1).append(" ： ").append(result.get(i).getPath());
+                                else sb.append("图片").append(i + 1).append(" ： ").append(result.get(i).getPath()).append("\n");
+                            }
+                            tvImages.setText(sb.toString());
+                        } else {
+                            tvImages.setText("--");
+                        }
                     }
-                    tvImages.setText(sb.toString());
-                } else {
-                    tvImages.setText("--");
-                }
-            } else {
-                Toast.makeText(this, "没有选择图片", Toast.LENGTH_SHORT).show();
-                tvImages.setText("--");
-            }
-        }
+
+                    @Override
+                    public void onCancel() {
+                        // 取消
+                    }
+                });
     }
 
     @OnClick(R.id.formUpload)
@@ -125,7 +164,7 @@ public class FormUploadActivity extends BaseDetailActivity {
         ArrayList<File> files = new ArrayList<>();
         if (imageItems != null && imageItems.size() > 0) {
             for (int i = 0; i < imageItems.size(); i++) {
-                files.add(new File(imageItems.get(i).path));
+                files.add(new File(imageItems.get(i).getRealPath()));
             }
         }
         //拼接参数

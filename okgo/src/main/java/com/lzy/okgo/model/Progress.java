@@ -17,6 +17,7 @@ package com.lzy.okgo.model;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.Parcelable;
 import android.os.SystemClock;
 
 import com.lzy.okgo.OkGo;
@@ -76,7 +77,7 @@ public class Progress implements Serializable {
     public long date;                               //创建时间
     public Request<?, ? extends Request> request;   //网络请求
     public Serializable extra1;                     //额外的数据
-    public Serializable extra2;                     //额外的数据
+    public Parcelable extra2;                     //额外的数据
     public Serializable extra3;                     //额外的数据
     public Throwable exception;                     //当前进度出现的异常
 
@@ -190,7 +191,7 @@ public class Progress implements Serializable {
         progress.date = cursor.getLong(cursor.getColumnIndex(Progress.DATE));
         progress.request = (Request<?, ? extends Request>) IOUtils.toObject(cursor.getBlob(cursor.getColumnIndex(Progress.REQUEST)));
         progress.extra1 = (Serializable) IOUtils.toObject(cursor.getBlob(cursor.getColumnIndex(Progress.EXTRA1)));
-        progress.extra2 = (Serializable) IOUtils.toObject(cursor.getBlob(cursor.getColumnIndex(Progress.EXTRA2)));
+        progress.extra2 = (Parcelable) IOUtils.toObject(cursor.getBlob(cursor.getColumnIndex(Progress.EXTRA2)));
         progress.extra3 = (Serializable) IOUtils.toObject(cursor.getBlob(cursor.getColumnIndex(Progress.EXTRA3)));
         return progress;
     }

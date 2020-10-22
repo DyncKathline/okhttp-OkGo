@@ -18,16 +18,17 @@ package com.lzy.demo.supercache;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.android.material.snackbar.Snackbar;
 import com.lzy.demo.R;
 import com.lzy.demo.base.BaseFragment;
 import com.lzy.demo.model.GankModel;
@@ -55,7 +56,8 @@ public class NewsTabFragment extends BaseFragment implements SwipeRefreshLayout.
 
     private static final int PAGE_SIZE = 20;
 
-    @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
     @BindView(R.id.refreshLayout) SwipeRefreshLayout refreshLayout;
 
     private Context context;

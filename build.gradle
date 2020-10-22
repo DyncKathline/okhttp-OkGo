@@ -5,10 +5,10 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath 'com.android.tools.build:gradle:3.6.1'
 
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -27,16 +27,16 @@ task clean(type: Delete) {
 }
 
 ext {
-    versionCode = 28
+    versionCode = 29
     versionName_okgo = '3.0.4'
     versionName_okserver = '2.0.5'
     versionName_okrx = '1.0.2'
     versionName_okrx2 = '2.0.2'
 
     libMinSdkVersion = 14
-    appMinSdkVersion = 16
-    targetSdkVersion = 28
-    compileSdkVersion = 28
-    buildToolsVersion = '28.0.3'
-    supportVersion = '28.0.0'
+    appMinSdkVersion = 19
+    targetSdkVersion = 29
+    compileSdkVersion = 29
+    buildToolsVersion = '29.0.3'
+    supportVersion = '1.1.0'
 }

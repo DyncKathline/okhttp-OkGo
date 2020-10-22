@@ -16,11 +16,12 @@
 package com.lzy.demo.base;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
 
 /**
  * 若把初始化内容放到initData实现,就是采用Lazy方式加载的Fragment

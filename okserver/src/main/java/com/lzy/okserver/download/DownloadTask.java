@@ -16,6 +16,7 @@
 package com.lzy.okserver.download;
 
 import android.content.ContentValues;
+import android.os.Parcelable;
 import android.text.TextUtils;
 
 import com.lzy.okgo.db.DownloadManager;
@@ -111,7 +112,7 @@ public class DownloadTask implements Runnable {
         return this;
     }
 
-    public DownloadTask extra2(Serializable extra2) {
+    public DownloadTask extra2(Parcelable extra2) {
         progress.extra2 = extra2;
         return this;
     }

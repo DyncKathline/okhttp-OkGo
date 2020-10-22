@@ -16,12 +16,13 @@
 package com.lzy.demo.okdownload;
 
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.format.Formatter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.Toolbar;
 
 import com.lzy.demo.R;
 import com.lzy.demo.base.BaseActivity;
@@ -51,7 +52,8 @@ import butterknife.OnClick;
  */
 public class DesActivity extends BaseActivity {
 
-    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.icon) ImageView icon;
     @BindView(R.id.name) TextView name;
     @BindView(R.id.downloadSize) TextView downloadSize;

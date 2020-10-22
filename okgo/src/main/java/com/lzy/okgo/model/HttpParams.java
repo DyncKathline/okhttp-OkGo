@@ -15,13 +15,19 @@
  */
 package com.lzy.okgo.model;
 
+import android.net.Uri;
+
+import com.lzy.okgo.OkGo;
 import com.lzy.okgo.utils.HttpUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -184,7 +190,50 @@ public class HttpParams implements Serializable {
                 fileWrappers = new ArrayList<>();
                 fileParamsMap.put(key, fileWrappers);
             }
-            fileWrappers.add(new FileWrapper(file, fileName, contentType));
+            Uri uri;
+            InputStream is;
+            String path = file.getAbsolutePath();
+            if(HttpUtils.beforeAndroidTen()) {
+                is = HttpUtils.readFileInputStream(path);
+            }else {
+                if(path.startsWith("content://")) {
+                    uri = Uri.parse(path);
+                }else {
+                    uri = Uri.parse("file://" + path);
+                }
+                is = HttpUtils.uriToInputStream(OkGo.getInstance().getContext(), uri);
+            }
+            fileWrappers.add(new FileWrapper(null, fileName, is, null, contentType));
+        }
+    }
+
+    public void put(String key, String fileName, InputStream fileInputStream) {
+        if (key != null) {
+            List<FileWrapper> fileWrappers = fileParamsMap.get(key);
+            if (fileWrappers == null) {
+                fileWrappers = new ArrayList<>();
+                fileParamsMap.put(key, fileWrappers);
+            }
+            fileWrappers.add(new FileWrapper(null, fileName, fileInputStream, null, HttpUtils.guessMimeType(fileName)));
+        }
+    }
+
+    public void put(String key, String fileName, String content) throws UnsupportedEncodingException {
+        put(key, fileName, content, Charset.forName("UTF-8").toString());
+    }
+
+    public void put(String key, String fileName, String content, String charsetName) throws UnsupportedEncodingException {
+        put(key, fileName, content.getBytes(charsetName));
+    }
+
+    public void put(String key, String fileName, byte[] content) {
+        if (key != null) {
+            List<FileWrapper> fileWrappers = fileParamsMap.get(key);
+            if (fileWrappers == null) {
+                fileWrappers = new ArrayList<>();
+                fileParamsMap.put(key, fileWrappers);
+            }
+            fileWrappers.add(new FileWrapper(null, fileName, null, content, HttpUtils.guessMimeType(fileName)));
         }
     }
 
@@ -228,14 +277,24 @@ public class HttpParams implements Serializable {
 
         public File file;
         public String fileName;
+        public InputStream fileInputStream;
+        public byte[] fileContent;
         public transient MediaType contentType;
         public long fileSize;
 
-        public FileWrapper(File file, String fileName, MediaType contentType) {
+        public FileWrapper() {
+
+        }
+
+        public FileWrapper(File file, String fileName, InputStream fileInputStream, byte[] fileContent, MediaType contentType) {
             this.file = file;
             this.fileName = fileName;
+            this.fileInputStream = fileInputStream;
+            this.fileContent = fileContent;
             this.contentType = contentType;
-            this.fileSize = file.length();
+            if(file != null) {
+                this.fileSize = file.length();
+            }
         }
 
         private void writeObject(ObjectOutputStream out) throws IOException {

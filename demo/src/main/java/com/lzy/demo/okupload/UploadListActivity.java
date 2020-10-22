@@ -17,17 +17,20 @@ package com.lzy.demo.okupload;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.listener.OnResultCallbackListener;
 import com.lzy.demo.R;
 import com.lzy.demo.base.BaseActivity;
-import com.lzy.demo.utils.GlideImageLoader;
-import com.lzy.imagepicker.ImagePicker;
-import com.lzy.imagepicker.bean.ImageItem;
-import com.lzy.imagepicker.ui.ImageGridActivity;
+import com.lzy.demo.utils.GlideEngine;
 import com.lzy.okserver.OkUpload;
 import com.lzy.okserver.task.XExecutor;
 import com.lzy.okserver.upload.UploadTask;
@@ -48,8 +51,10 @@ import butterknife.OnClick;
  */
 public class UploadListActivity extends BaseActivity implements XExecutor.OnAllTaskEndListener {
 
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
 
     private UploadAdapter adapter;
     private OkUpload okUpload;
@@ -85,13 +90,23 @@ public class UploadListActivity extends BaseActivity implements XExecutor.OnAllT
 
     @OnClick(R.id.select)
     public void select(View view) {
-        ImagePicker imagePicker = ImagePicker.getInstance();
-        imagePicker.setImageLoader(new GlideImageLoader());
-        imagePicker.setShowCamera(true);
-        imagePicker.setSelectLimit(9);
-        imagePicker.setCrop(false);
-        Intent intent = new Intent(getApplicationContext(), ImageGridActivity.class);
-        startActivityForResult(intent, 100);
+        PictureSelector.create(this)
+                .openGallery(PictureMimeType.ofAll())
+                .loadImageEngine(GlideEngine.createGlideEngine())
+                .forResult(new OnResultCallbackListener<LocalMedia>() {
+                    @Override
+                    public void onResult(List<LocalMedia> result) {
+                        // 结果回调
+                        if (result != null && result.size() > 0) {
+                            tasks = adapter.updateData(result);
+                        }
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // 取消
+                    }
+                });
     }
 
     @OnClick(R.id.upload)
@@ -102,20 +117,6 @@ public class UploadListActivity extends BaseActivity implements XExecutor.OnAllT
         }
         for (UploadTask<?> task : tasks) {
             task.start();
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
-            if (data != null && requestCode == 100) {
-                //noinspection unchecked
-                List<ImageItem> images = (List<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
-                tasks = adapter.updateData(images);
-            } else {
-                showToast("没有数据");
-            }
         }
     }
 }

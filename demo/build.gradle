@@ -78,25 +78,23 @@ task makeApk {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile "androidx.appcompat:appcompat:$supportVersion"
-    compile "androidx.recyclerview:recyclerview:$supportVersion"
-//    compile "com.android.support:design:$supportVersion"
-//    compile "com.android.support:cardview-v7:$supportVersion"
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "androidx.appcompat:appcompat:$supportVersion"
+    implementation "androidx.recyclerview:recyclerview:$supportVersion"
 
-    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v2.0.7'
-    compile 'com.github.bumptech.glide:glide:4.11.0'
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v2.0.7'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.jakewharton:butterknife:10.2.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
-    compile 'com.google.code.gson:gson:2.8.6'
-    compile 'com.readystatesoftware.chuck:library:1.0.4'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.readystatesoftware.chuck:library:1.0.4'
 
-    compile project(':okgo')
-    compile project(':okserver')
-//    compile 'com.lzy.net:okgo:3.0.4'
-//    compile 'com.lzy.net:okserver:2.0.5'
-    compile 'com.lzy.widget:ninegridview:0.2.1'
+    implementation project(':okgo')
+    implementation project(':okserver')
+//    implementation 'com.kathline.net:okgo:4.0.2'
+//    compile 'com.kathline.net:okserver:4.0.2'
+    implementation 'com.lzy.widget:ninegridview:0.2.1'
     implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.5.9'
-    compile 'com.lzy.widget:view-core:0.2.1'
+    implementation 'com.lzy.widget:view-core:0.2.1'
 }

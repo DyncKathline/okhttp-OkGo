@@ -39,12 +39,6 @@ public abstract class AbsCallback<T> implements Callback<T> {
 
     @Override
     public void onStart(Request<T, ? extends Request> request) {
-        Object tag = request.getTag();
-        if(tag instanceof Activity) {
-            AppCompatActivityLifecycle.bind(new ActivityLifecycle((Activity) tag));
-        }else if(tag instanceof LifecycleOwner) {
-            AppCompatActivityLifecycle.bind((LifecycleOwner) tag);
-        }
     }
 
     @Override

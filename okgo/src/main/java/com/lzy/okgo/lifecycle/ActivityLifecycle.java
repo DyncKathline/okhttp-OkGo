@@ -1,6 +1,7 @@
 package com.lzy.okgo.lifecycle;
 import android.app.Activity;
 import android.app.Application;
+import android.app.Fragment;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,12 +19,21 @@ public final class ActivityLifecycle implements
     private final LifecycleRegistry mLifecycle = new LifecycleRegistry(this);
 
     private Activity mActivity;
+    private Fragment mFragment;
 
     public ActivityLifecycle(Activity activity) {
         mActivity = activity;
 
         if (mActivity instanceof LifecycleOwner) {
             ((LifecycleOwner) mActivity).getLifecycle().addObserver(this);
+        }
+    }
+
+    public ActivityLifecycle(Fragment fragment) {
+        mFragment = fragment;
+
+        if (mFragment instanceof LifecycleOwner) {
+            ((LifecycleOwner) mFragment).getLifecycle().addObserver(this);
         }
     }
 
@@ -53,9 +63,10 @@ public final class ActivityLifecycle implements
         mLifecycle.handleLifecycleEvent(event);
         switch (event) {
             case ON_DESTROY:
-                OkGo.getInstance().cancelTag(source);
                 source.getLifecycle().removeObserver(this);
+                OkGo.getInstance().cancelTag(source);
                 mActivity = null;
+                mFragment = null;
                 break;
             default:
                 break;

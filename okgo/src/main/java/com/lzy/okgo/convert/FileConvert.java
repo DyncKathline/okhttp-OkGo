@@ -103,7 +103,7 @@ public class FileConvert implements Converter<File> {
                 Progress.changeProgress(progress, len, new Progress.Action() {
                     @Override
                     public void call(Progress progress) {
-                        if(AppCompatActivityLifecycle.isLifecycleActive(lifecycleOwner)) {
+                        if(AppCompatActivityLifecycle.isLifecycleNull(lifecycleOwner) || AppCompatActivityLifecycle.isLifecycleActive(lifecycleOwner)) {
                             onProgress(progress);
                         }
                     }

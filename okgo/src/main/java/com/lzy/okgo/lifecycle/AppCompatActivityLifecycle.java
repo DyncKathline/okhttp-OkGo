@@ -23,6 +23,10 @@ public class AppCompatActivityLifecycle implements LifecycleEventObserver {
         return lifecycleOwner != null && lifecycleOwner.getLifecycle().getCurrentState() != Lifecycle.State.DESTROYED;
     }
 
+    public static boolean isLifecycleNull(LifecycleOwner lifecycleOwner) {
+        return lifecycleOwner == null;
+    }
+
     @Override
     public void onStateChanged(@NonNull LifecycleOwner source, @NonNull Lifecycle.Event event) {
         if (event == Lifecycle.Event.ON_DESTROY) {

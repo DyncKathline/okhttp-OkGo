@@ -15,12 +15,6 @@
  */
 package com.lzy.okgo.callback;
 
-import android.app.Activity;
-
-import androidx.lifecycle.LifecycleOwner;
-
-import com.lzy.okgo.lifecycle.ActivityLifecycle;
-import com.lzy.okgo.lifecycle.AppCompatActivityLifecycle;
 import com.lzy.okgo.model.Progress;
 import com.lzy.okgo.model.Response;
 import com.lzy.okgo.request.base.Request;

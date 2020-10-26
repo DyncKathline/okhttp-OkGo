@@ -142,7 +142,7 @@ public abstract class BaseCachePolicy<T> implements CachePolicy<T> {
                 } else {
                     if (!call.isCanceled()) {
                         Response<T> error = Response.error(false, call, null, e);
-                        if(AppCompatActivityLifecycle.isLifecycleActive(request.getLifecycle())) {
+                        if(AppCompatActivityLifecycle.isLifecycleNull(request.getLifecycle()) || AppCompatActivityLifecycle.isLifecycleActive(request.getLifecycle())) {
                             onError(error);
                         }
                     }
@@ -156,7 +156,7 @@ public abstract class BaseCachePolicy<T> implements CachePolicy<T> {
                 //network error
                 if (responseCode == 404 || responseCode >= 500) {
                     Response<T> error = Response.error(false, call, response, HttpException.NET_ERROR());
-                    if(AppCompatActivityLifecycle.isLifecycleActive(request.getLifecycle())) {
+                    if(AppCompatActivityLifecycle.isLifecycleNull(request.getLifecycle()) || AppCompatActivityLifecycle.isLifecycleActive(request.getLifecycle())) {
                         onError(error);
                     }
                     return;
@@ -169,12 +169,12 @@ public abstract class BaseCachePolicy<T> implements CachePolicy<T> {
                     //save cache when request is successful
                     saveCache(response.headers(), body);
                     Response<T> success = Response.success(false, body, call, response);
-                    if(AppCompatActivityLifecycle.isLifecycleActive(request.getLifecycle())) {
+                    if(AppCompatActivityLifecycle.isLifecycleNull(request.getLifecycle()) || AppCompatActivityLifecycle.isLifecycleActive(request.getLifecycle())) {
                         onSuccess(success);
                     }
                 } catch (Throwable throwable) {
                     Response<T> error = Response.error(false, call, response, throwable);
-                    if(AppCompatActivityLifecycle.isLifecycleActive(request.getLifecycle())) {
+                    if(AppCompatActivityLifecycle.isLifecycleNull(request.getLifecycle()) || AppCompatActivityLifecycle.isLifecycleActive(request.getLifecycle())) {
                         onError(error);
                     }
                 }

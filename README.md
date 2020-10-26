@@ -1,10 +1,10 @@
 ![](http://7xss53.com1.z0.glb.clouddn.com/markdown/aqyyw.jpg)
 
-## OkGo - 3.0 震撼来袭, 一个基于okhttp的标准RESTful风格的网络框架
+## OkGo - 4.0 震撼来袭, 一个基于okhttp的标准RESTful风格的网络框架
 
-> 工程结构全新优化  
-支持RxJava  
-支持RxJava2  
+> 工程结构全新优化
+支持AndroidQ
+支持自动生命周期管理--tag设置为AppCompatActivity，Fragment，Activity就可自动取消请求页面结束时
 支持自定义缓存策略  
 支持下载管理  
 支持上传管理  

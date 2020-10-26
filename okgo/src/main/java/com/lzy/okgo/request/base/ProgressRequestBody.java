@@ -99,7 +99,7 @@ public class ProgressRequestBody<T> extends RequestBody {
             Progress.changeProgress(progress, byteCount, new Progress.Action() {
                 @Override
                 public void call(Progress progress) {
-                    if (interceptor != null && AppCompatActivityLifecycle.isLifecycleActive(mLifecycleOwner)) {
+                    if (interceptor != null && (AppCompatActivityLifecycle.isLifecycleNull(mLifecycleOwner) || AppCompatActivityLifecycle.isLifecycleActive(mLifecycleOwner))) {
                         interceptor.uploadProgress(progress);
                     } else {
                         onProgress(progress);
@@ -113,7 +113,7 @@ public class ProgressRequestBody<T> extends RequestBody {
         HttpUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (callback != null && AppCompatActivityLifecycle.isLifecycleActive(mLifecycleOwner)) {
+                if (callback != null && (AppCompatActivityLifecycle.isLifecycleNull(mLifecycleOwner) || AppCompatActivityLifecycle.isLifecycleActive(mLifecycleOwner))) {
                     callback.uploadProgress(progress);
                 }
             }

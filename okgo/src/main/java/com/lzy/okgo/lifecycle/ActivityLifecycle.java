@@ -1,6 +1,7 @@
 package com.lzy.okgo.lifecycle;
 import android.app.Activity;
 import android.app.Application;
+import android.app.Fragment;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,9 @@ import androidx.lifecycle.LifecycleRegistry;
 
 import com.lzy.okgo.OkGo;
 
+/**
+ * 使用没有实现LifecycleOwner的activity和fragment进行生命周期绑定
+ */
 public final class ActivityLifecycle implements
         LifecycleOwner, LifecycleEventObserver,
         Application.ActivityLifecycleCallbacks {
@@ -21,6 +25,14 @@ public final class ActivityLifecycle implements
 
     public ActivityLifecycle(Activity activity) {
         mActivity = activity;
+
+        if (mActivity instanceof LifecycleOwner) {
+            ((LifecycleOwner) mActivity).getLifecycle().addObserver(this);
+        }
+    }
+
+    public ActivityLifecycle(Fragment fragment) {
+        mActivity = fragment.getActivity();
 
         if (mActivity instanceof LifecycleOwner) {
             ((LifecycleOwner) mActivity).getLifecycle().addObserver(this);

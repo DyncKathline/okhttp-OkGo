@@ -15,6 +15,8 @@
  */
 package com.lzy.okgo.request.base;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.text.TextUtils;
 
 import androidx.lifecycle.LifecycleOwner;
@@ -29,6 +31,8 @@ import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.cache.policy.CachePolicy;
 import com.lzy.okgo.callback.Callback;
 import com.lzy.okgo.convert.Converter;
+import com.lzy.okgo.lifecycle.ActivityLifecycle;
+import com.lzy.okgo.lifecycle.AppCompatActivityLifecycle;
 import com.lzy.okgo.model.HttpHeaders;
 import com.lzy.okgo.model.HttpMethod;
 import com.lzy.okgo.model.HttpParams;
@@ -357,6 +361,13 @@ public abstract class Request<T, R extends Request> implements Serializable {
             mRequest = generateRequest(progressRequestBody);
         } else {
             mRequest = generateRequest(null);
+        }
+        if(tag instanceof LifecycleOwner) {
+            AppCompatActivityLifecycle.bind((LifecycleOwner) tag);
+        }else if(tag instanceof Activity) {
+            AppCompatActivityLifecycle.bind(new ActivityLifecycle((Activity) tag));
+        }else if(tag instanceof Fragment) {
+            AppCompatActivityLifecycle.bind(new ActivityLifecycle((Fragment) tag));
         }
         if (client == null) client = OkGo.getInstance().getOkHttpClient();
         return client.newCall(mRequest);

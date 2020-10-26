@@ -41,7 +41,7 @@ public class NoneCacheRequestPolicy<T> extends BaseCachePolicy<T> {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(AppCompatActivityLifecycle.isLifecycleActive(request.getLifecycle())) {
+                if(AppCompatActivityLifecycle.isLifecycleNull(request.getLifecycle()) || AppCompatActivityLifecycle.isLifecycleActive(request.getLifecycle())) {
                     mCallback.onSuccess(success);
                     mCallback.onFinish();
                 }
@@ -54,7 +54,7 @@ public class NoneCacheRequestPolicy<T> extends BaseCachePolicy<T> {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(AppCompatActivityLifecycle.isLifecycleActive(request.getLifecycle())) {
+                if(AppCompatActivityLifecycle.isLifecycleNull(request.getLifecycle()) || AppCompatActivityLifecycle.isLifecycleActive(request.getLifecycle())) {
                     mCallback.onError(error);
                     mCallback.onFinish();
                 }
@@ -91,14 +91,14 @@ public class NoneCacheRequestPolicy<T> extends BaseCachePolicy<T> {
                     prepareRawCall();
                 } catch (Throwable throwable) {
                     Response<T> error = Response.error(false, rawCall, null, throwable);
-                    if(AppCompatActivityLifecycle.isLifecycleActive(request.getLifecycle())) {
+                    if(AppCompatActivityLifecycle.isLifecycleNull(request.getLifecycle()) || AppCompatActivityLifecycle.isLifecycleActive(request.getLifecycle())) {
                         mCallback.onError(error);
                     }
                     return;
                 }
                 if (cacheEntity != null) {
                     Response<T> success = Response.success(true, cacheEntity.getData(), rawCall, null);
-                    if(AppCompatActivityLifecycle.isLifecycleActive(request.getLifecycle())) {
+                    if(AppCompatActivityLifecycle.isLifecycleNull(request.getLifecycle()) || AppCompatActivityLifecycle.isLifecycleActive(request.getLifecycle())) {
                         mCallback.onCacheSuccess(success);
                         mCallback.onFinish();
                     }

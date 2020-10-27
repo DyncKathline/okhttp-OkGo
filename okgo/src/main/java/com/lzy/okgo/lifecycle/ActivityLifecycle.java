@@ -28,6 +28,8 @@ public final class ActivityLifecycle implements
 
         if (mActivity instanceof LifecycleOwner) {
             ((LifecycleOwner) mActivity).getLifecycle().addObserver(this);
+        } else {
+            mActivity.getApplication().registerActivityLifecycleCallbacks(this);
         }
     }
 
@@ -36,6 +38,8 @@ public final class ActivityLifecycle implements
 
         if (mActivity instanceof LifecycleOwner) {
             ((LifecycleOwner) mActivity).getLifecycle().addObserver(this);
+        } else {
+            mActivity.getApplication().registerActivityLifecycleCallbacks(this);
         }
     }
 

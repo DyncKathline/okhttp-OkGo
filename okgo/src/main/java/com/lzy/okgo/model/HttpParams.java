@@ -179,7 +179,13 @@ public class HttpParams implements Serializable {
 
     public void put(String key, FileWrapper fileWrapper) {
         if (key != null && fileWrapper != null) {
-            put(key, fileWrapper.file, fileWrapper.fileName, fileWrapper.contentType);
+            if(fileWrapper.file != null) {
+                put(key, fileWrapper.file, fileWrapper.fileName, fileWrapper.contentType);
+            }else if(fileWrapper.fileInputStream != null) {
+                put(key, fileWrapper.fileName, fileWrapper.fileInputStream);
+            }else if(fileWrapper.fileContent != null) {
+                put(key, fileWrapper.fileName, fileWrapper.fileContent);
+            }
         }
     }
 

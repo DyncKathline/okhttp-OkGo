@@ -28,8 +28,8 @@ task clean(type: Delete) {
 
 ext {
     versionCode = 29
-    versionName_okgo = '4.0.4'
-    versionName_okserver = '4.0.4'
+    versionName_okgo = '4.0.6'
+    versionName_okserver = '4.0.6'
 
     libMinSdkVersion = 14
     appMinSdkVersion = 19

@@ -362,11 +362,11 @@ public abstract class Request<T, R extends Request> implements Serializable {
         } else {
             mRequest = generateRequest(null);
         }
-        if(tag instanceof LifecycleOwner) {
+        if(tag != null && tag instanceof LifecycleOwner) {
             AppCompatActivityLifecycle.bind((LifecycleOwner) tag);
-        }else if(tag instanceof Activity) {
+        }else if(tag != null && tag instanceof Activity) {
             AppCompatActivityLifecycle.bind(new ActivityLifecycle((Activity) tag));
-        }else if(tag instanceof Fragment) {
+        }else if(tag != null && tag instanceof Fragment) {
             AppCompatActivityLifecycle.bind(new ActivityLifecycle((Fragment) tag));
         }
         if (client == null) client = OkGo.getInstance().getOkHttpClient();
